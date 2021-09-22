@@ -19,12 +19,7 @@ func InitDB() {
 	password := viper.GetString("datasource.password")
 	charset := viper.GetString("datasource.charset")
 	path := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
-		username,
-		password,
-		host,
-		port,
-		database,
-		charset)
+		username, password, host, port, database, charset)
 	db, err := gorm.Open(driverName, path)
 	if err != nil {
 		panic("failed to connect database ,err:" + err.Error())
@@ -37,4 +32,3 @@ func InitDB() {
 	//数据库迁移
 	migration()
 }
-

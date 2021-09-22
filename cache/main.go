@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"BiliBili.com/utils"
+	"BiliBili.com/pkg/utils"
 	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
 )

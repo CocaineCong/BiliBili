@@ -1,7 +1,7 @@
 package service
 
 import (
-	"BiliBili.com/utils"
+	"BiliBili.com/pkg/utils"
 	"github.com/robfig/cron"
 )
 

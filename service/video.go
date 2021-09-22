@@ -3,7 +3,7 @@ package service
 import (
 	"BiliBili.com/cache"
 	"BiliBili.com/model"
-	"BiliBili.com/utils"
+	"BiliBili.com/pkg/utils"
 	"strconv"
 )
 
