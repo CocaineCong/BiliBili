@@ -12,17 +12,19 @@ import (
 )
 
 type VideoShow struct {
-	Title        string
-	Cover        string
-	Video        string
-	VideoType    string
-	Introduction string  	 //视频简介
-	Uid          uint
-	Author       model.User
-	Original     bool        //是否为原创
-	Weights      float32     //视频权重
-	Clicks       int         //点击量
-	Review       bool   	 //是否审查通过
+	Title        string `json:"title"`
+	Cover        string `json:"cover"`
+	Video        string `json:"video"`
+	VideoType    string `json:"video_type"`
+	Introduction string `json:"introduction"`  	 //视频简介
+	Uid          uint `json:"uid"`
+	Author       model.User `json:"author"`
+	Original     bool `json:"original"`        //是否为原创
+	Weights      float32 `json:"weights"`     //视频权重
+	Clicks       int `json:"clicks"`         //点击量
+	Review       bool `json:"review"`   	 //是否审查通过
+	PageSize int `json:"page_size" form:"page_size"`
+	PageNum int `json:"page_num" form:"page_num"`
 }
 
 type VideoRecommend struct {
@@ -88,8 +90,6 @@ func GetClicksFromRedis(redis *redis.Client, vid int, dbClicks string) string {
 	return strClicks
 }
 
-
-
 func (service *VideoShow) Show (id string) serializer.Response{
 	code := e.SUCCESS
 	var video model.Video
@@ -137,5 +137,19 @@ func (service *VideoRecommend) Recommend() serializer.Response {
 		Status:code,
 		Msg:e.GetMsg(code),
 		Data:serializer.BuildVideos(videos),
+	}
+}
+
+func (service *VideoShow) List(id string) serializer.Response {
+	code := e.SUCCESS
+	var videos []model.Video
+	var count int
+	model.DB.Model(&model.Video{}).Where("uid = ?",id).
+		Limit(service.PageSize).Offset((service.PageNum-1)*service.PageSize).
+		Find(&videos).Count(&count)
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:serializer.BuildListResponse(serializer.BuildVideos(videos),uint(count)),
 	}
 }

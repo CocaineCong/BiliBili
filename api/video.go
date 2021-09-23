@@ -19,4 +19,9 @@ func VideoRecommend(c *gin.Context) {
 	c.JSON(200,res)
 }
 
-
+func VideoList(c *gin.Context) {
+	var videoListService service.VideoShow
+	_ = c.ShouldBind(&videoListService)
+	res := videoListService.List(c.Param("id"))
+	c.JSON(200,res)
+}
