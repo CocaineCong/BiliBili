@@ -15,7 +15,12 @@ func NewRouter() *gin.Engine {
 		v1.POST("user/register",api.UserRegister)
 		v1.POST("user/login",api.UserLogin)
 
+		// 轮播图
 		v1.GET("carousels",api.Carousel)
+
+		//视频操作
+		v1.GET("video/:id",api.VideoShow)
+		v1.GET("video-recommend", api.VideoRecommend)
 
 		authed := v1.Group("/")            //需要登陆保护
 		authed.Use(middleware.JWT())
