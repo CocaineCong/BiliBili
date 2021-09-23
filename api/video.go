@@ -25,3 +25,10 @@ func VideoList(c *gin.Context) {
 	res := videoListService.List(c.Param("id"))
 	c.JSON(200,res)
 }
+
+func VideoFavorite(c *gin.Context) {
+	var videoFavoriteService service.VideoShow
+	_ = c.ShouldBind(&videoFavoriteService)
+	res := videoFavoriteService.Favor(c.Param("id"))
+	c.JSON(200,res)
+}

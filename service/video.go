@@ -153,3 +153,17 @@ func (service *VideoShow) List(id string) serializer.Response {
 		Data:serializer.BuildListResponse(serializer.BuildVideos(videos),uint(count)),
 	}
 }
+
+func (service *VideoShow) Favor(id string) serializer.Response {
+	code := e.SUCCESS
+	var favorite []model.Interactive
+	var count int
+	model.DB.Model(model.Interactive{}).Where("uid = ? AND collect = true",id).
+		Limit(service.PageSize).Offset((service.PageSize-1)*service.PageNum).
+		Preload("Video").Find(&favorite).Count(&count)
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:serializer.BuildListResponse(serializer.BuildFavors(favorite),uint(count)),
+	}
+}

@@ -30,6 +30,7 @@ func NewRouter() *gin.Engine {
 			authed.POST("user/search",api.UserSearch)
 
 			authed.GET("video/:id",api.VideoList)
+			authed.GET("video-favor/:id",api.VideoFavorite)
 		}
 	}
 	return r
