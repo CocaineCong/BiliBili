@@ -33,7 +33,7 @@ type UserInfo struct {
 }
 
 type UserSearch struct {
-
+	UserName string `form:"user_name" json:"user_name"`
 }
 
 func (service *UserRegister) Register() serializer.Response {
@@ -141,5 +141,14 @@ func (service *UserInfo) Show(id uint) serializer.Response {
 }
 
 func (service *UserSearch) Search() serializer.Response {
-
+	code := e.SUCCESS
+	var user []model.User
+	model.DB.Model(&model.User{}).
+		Where("user_name LIKE ?","%"+service.UserName+"%").
+		Find(&user)
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:serializer.BuildUsers(user),
+	}
 }
