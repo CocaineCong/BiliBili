@@ -32,6 +32,10 @@ type UserInfo struct {
 
 }
 
+type UserSearch struct {
+
+}
+
 func (service *UserRegister) Register() serializer.Response {
 	var user model.User
 	var count int
@@ -134,4 +138,8 @@ func (service *UserInfo) Show(id uint) serializer.Response {
 		Msg:e.GetMsg(code),
 		Data:"查看用户信息成功",
 	}
+}
+
+func (service *UserSearch) Search() serializer.Response {
+
 }

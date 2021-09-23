@@ -21,6 +21,7 @@ func NewRouter() *gin.Engine {
 		{
 			authed.PUT("user/update",api.UserUpdate)
 			authed.GET("user/show",api.UserInfo)
+			authed.POST("user/search",api.UserSearch)
 		}
 	}
 	return r

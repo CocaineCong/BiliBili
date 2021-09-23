@@ -37,3 +37,10 @@ func UserInfo(c *gin.Context) {
 	c.JSON(200,res)
 }
 
+func UserSearch(c *gin.Context) {
+	var userSearchService service.UserSearch
+	_ = c.ShouldBind(&userSearchService)
+	res := userSearchService.Search()
+	c.JSON(200,res)
+}
+
