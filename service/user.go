@@ -126,5 +126,12 @@ func (service *UserUpdate) Update(id uint) serializer.Response {
 }
 
 func (service *UserInfo) Show(id uint) serializer.Response {
-
+	code := e.SUCCESS
+	var user model.User
+	model.DB.Model(&model.User{}).First(&user,id)
+	return serializer.Response {
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:"查看用户信息成功",
+	}
 }

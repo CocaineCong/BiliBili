@@ -20,14 +20,11 @@ func UserLogin(c *gin.Context) {
 	c.JSON(200,res)
 }
 
-func UserSearch(c *gin.Context) {
-
-}
 
 func UserUpdate(c *gin.Context) {
 	var userUpdateService service.UserUpdate
 	_ = c.ShouldBind(&userUpdateService)
-	_,chaim,_ := utils.ParseUserToken(c.GetHeader("Authoriaztion"))
+	_,chaim,_ := utils.ParseUserToken(c.GetHeader("Authorization"))
 	res := userUpdateService.Update(chaim.UserId)
 	c.JSON(200,res)
 }
@@ -35,7 +32,8 @@ func UserUpdate(c *gin.Context) {
 func UserInfo(c *gin.Context) {
 	var userInfoService service.UserInfo
 	_ = c.ShouldBind(&userInfoService)
-	_,chaim,_ := utils.ParseUserToken(c.GetHeader("Authoriaztion"))
+	_,chaim,_ := utils.ParseUserToken(c.GetHeader("Authorization"))
 	res := userInfoService.Show(chaim.UserId)
 	c.JSON(200,res)
 }
+
