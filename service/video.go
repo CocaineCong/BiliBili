@@ -35,6 +35,13 @@ type VideoRecommend struct {
 	Clicks string `json:"clicks"`
 }
 
+type VideoInfo struct {
+	Title  string `json:"title" bind:"required"`
+	Cover  string `json:"cover" bind:"required"`
+	Introduction string `json:"introduction"`
+	Original bool `json:"original" bind:"required"`
+}
+
 func ClicksStoreInDB() {
 	utils.Logfile("[info]", " Clicks are stored in the database")
 	var vid int          //视频id
@@ -165,5 +172,43 @@ func (service *VideoShow) Favor(id string) serializer.Response {
 		Status:code,
 		Msg:e.GetMsg(code),
 		Data:serializer.BuildListResponse(serializer.BuildFavors(favorite),uint(count)),
+	}
+}
+
+func (service *VideoInfo) Update(id string,uid uint) serializer.Response {
+	code := e.SUCCESS
+	var video model.Video
+	model.DB.Where(model.Video{}).Where("id = ?",id).First(&video)
+
+	video.Cover = service.Cover
+	video.Title = service.Title
+	video.Introduction = service.Introduction
+	video.Original = service.Original
+	model.DB.Save(&video)
+	err := model.DB.Model(&model.Video{}).Where("id = ? and uid = ?", id, uid).
+		Updates(map[string]interface{}{"title": service.Title, "cover": service.Cover,
+			"introduction": service.Introduction, "original": service.Introduction}).Error
+	if err!=nil {
+		code = e.ERROR
+		return serializer.Response{
+			Status:code,
+			Msg:e.GetMsg(code),
+			Data:"视频更新数据出错",
+		}
+	}
+	err = model.DB.Model(&model.Review{}).Where("vid = ?", id).
+		Updates(map[string]interface{}{"status": 1000}).Error
+	if err != nil {
+		code = e.ERROR
+		return serializer.Response{
+			Status:code,
+			Msg:e.GetMsg(code),
+			Data:"修改审核状态失败",
+		}
+	}
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:"更新信息成功，重新进入审核",
 	}
 }
