@@ -21,12 +21,23 @@ type UserLogin struct {
 	Password string `json:"password" form:"password" bind:"required"`
 }
 
+type UserUpdate struct {
+	Name string `form:"name" json:"name" bind:"required"`
+	Gender int `form:"gender" json:"gender" `
+	Birthday string `form:"birthday" json:"birthday" time_format:"2006-01-02"`
+	Sign string `form:"sign" json:"sign" `
+}
+
+type UserInfo struct {
+
+}
+
 func (service *UserRegister) Register() serializer.Response {
 	var user model.User
 	var count int
 	code := e.SUCCESS
 	if !utils.VerifyEmailFormat(service.Email) {
-		code = e.INVALID_PARAMS
+		code = e.InvalidParams
 		return serializer.Response{
 			Status:code,
 			Msg:e.GetMsg(code),
@@ -35,7 +46,7 @@ func (service *UserRegister) Register() serializer.Response {
 	}
 	model.DB.Model(&model.User{}).Where("email = ?",service.Email).Count(&count)
 	if count>0 {
-		code = e.INVALID_PARAMS
+		code = e.InvalidParams
 		return serializer.Response{
 			Status:code,
 			Msg:e.GetMsg(code),
@@ -56,11 +67,11 @@ func (service *UserRegister) Register() serializer.Response {
 	}
 }
 
-func (service *UserLogin) UserLogin() serializer.Response {
+func (service *UserLogin) Login() serializer.Response {
 	code := e.SUCCESS
 	var user model.User
 	if !utils.VerifyEmailFormat(service.Email) {
-		code = e.INVALID_PARAMS
+		code = e.InvalidParams
 		return serializer.Response{
 			Status:code,
 			Msg:e.GetMsg(code),
@@ -69,7 +80,7 @@ func (service *UserLogin) UserLogin() serializer.Response {
 	}
 	model.DB.Model(&model.User{}).Where("email = ?",service.Email).First(&user)
 	if user.ID == 0{
-		code = e.INVALID_PARAMS
+		code = e.InvalidParams
 		return serializer.Response{
 			Status:code,
 			Msg:e.GetMsg(code),
@@ -77,7 +88,7 @@ func (service *UserLogin) UserLogin() serializer.Response {
 		}
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password),[]byte(service.Password)) ; err != nil {
-		code = e.INVALID_PARAMS
+		code = e.InvalidParams
 		return serializer.Response{
 			Status:code,
 			Msg:e.GetMsg(code),
@@ -91,4 +102,29 @@ func (service *UserLogin) UserLogin() serializer.Response {
 		Msg:e.GetMsg(code),
 		Data:serializer.TokenData{User:serializer.BuildUser(user),Token:token},
 	}
+}
+
+func (service *UserUpdate) Update(id uint) serializer.Response {
+	code := e.SUCCESS
+	err := model.DB.Model(model.User{}).Where("id = ?",id).
+		Updates(map[string]interface{}{
+			"name":service.Name,"gender":service.Gender,
+			"birthday":service.Birthday,"sign":service.Sign}).Error
+	if err!=nil {
+		code = e.ERROR
+		return serializer.Response{
+			Status:code,
+			Msg:e.GetMsg(code),
+			Data:"修改信息失败",
+		}
+	}
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:"修改信息成功",
+	}
+}
+
+func (service *UserInfo) Show(id uint) serializer.Response {
+
 }

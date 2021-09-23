@@ -19,9 +19,9 @@ func JWT() gin.HandlerFunc {
 		} else {
 			_ ,claims, err := utils.ParseUserToken(token)
 			if err != nil {
-				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
+				code = e.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {
-				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+				code = e.ErrorAuthCheckTokenTimeout
 			}
 		}
 		if code != e.SUCCESS {
@@ -44,15 +44,15 @@ func JWTAdmin() gin.HandlerFunc {
 		var data interface{}
 		token := c.GetHeader("Authorization")
 		if token == "" {
-			code = e.INVALID_PARAMS
+			code = e.InvalidParams
 		} else {
 			_,claims, err := utils.ParseUserToken(token)
 			if err != nil {
-				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
+				code = e.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {
-				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+				code = e.ErrorAuthCheckTokenTimeout
 			} else if claims.Authority == 0 {
-				code = e.ERROR_AUTH_INSUFFICIENT_AUTHORITY
+				code = e.ErrorAuthInsufficientAuthority
 			}
 		}
 		if code != e.SUCCESS {
