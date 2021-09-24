@@ -31,7 +31,8 @@ func NewRouter() *gin.Engine {
 
 			authed.GET("video/:id",api.VideoList)
 			authed.GET("video-favor/:id",api.VideoFavorite)
-			authed.PUT("video:id/",api.VideoUpdate)
+			authed.PUT("video/:id",api.VideoUpdate)
+			authed.DELETE("video/:id",api.VideoDelete)
 		}
 	}
 	return r

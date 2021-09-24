@@ -41,3 +41,10 @@ func VideoUpdate(c *gin.Context) {
 	res:=videoUpdateService.Update(c.Param("id"),chaim.UserId)
 	c.JSON(200,res)
 }
+
+func VideoDelete(c *gin.Context) {
+	var videoDeleteService service.VideoDelete
+	_ = c.ShouldBind(&videoDeleteService)
+	res := videoDeleteService.Delete(c.Param("id"))
+	c.JSON(200,res)
+}

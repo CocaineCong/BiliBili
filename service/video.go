@@ -42,6 +42,10 @@ type VideoInfo struct {
 	Original bool `json:"original" bind:"required"`
 }
 
+type VideoDelete struct {
+
+}
+
 func ClicksStoreInDB() {
 	utils.Logfile("[info]", " Clicks are stored in the database")
 	var vid int          //视频id
@@ -210,5 +214,18 @@ func (service *VideoInfo) Update(id string,uid uint) serializer.Response {
 		Status:code,
 		Msg:e.GetMsg(code),
 		Data:"更新信息成功，重新进入审核",
+	}
+}
+
+func (service *VideoDelete) Delete(id string) serializer.Response {
+	code := e.SUCCESS
+	var video model.Video
+	model.DB.Where(model.Video{}).Where("id=?",id).Delete(&video)
+	idT, _ := strconv.Atoi(id)
+	cache.RedisClient.Del(cache.VideoClicksKey(idT))
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:"删除成功",
 	}
 }
