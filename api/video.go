@@ -48,3 +48,11 @@ func VideoDelete(c *gin.Context) {
 	res := videoDeleteService.Delete(c.Param("id"))
 	c.JSON(200,res)
 }
+
+func VideoUpload(c *gin.Context) {
+	var videoUploadService service.VideoShow
+	_ = c.ShouldBind(&videoUploadService)
+	_,chaim,_ := utils.ParseUserToken(c.Param("Authorization"))
+	res:=videoUploadService.Upload(chaim.UserId)
+	c.JSON(200,res)
+}

@@ -7,13 +7,14 @@ import (
 	"BiliBili.com/pkg/utils"
 	"BiliBili.com/serializer"
 	"github.com/go-redis/redis"
+	"github.com/spf13/viper"
 	"strconv"
 	"time"
 )
 
 type VideoShow struct {
-	Title        string `json:"title"`
-	Cover        string `json:"cover"`
+	Title        string `json:"title" bind:"required"`
+	Cover        string `json:"cover" bind:"required"`
 	Video        string `json:"video"`
 	VideoType    string `json:"video_type"`
 	Introduction string `json:"introduction"`  	 //视频简介
@@ -227,5 +228,24 @@ func (service *VideoDelete) Delete(id string) serializer.Response {
 		Status:code,
 		Msg:e.GetMsg(code),
 		Data:"删除成功",
+	}
+}
+
+func (service *VideoShow) Upload(id uint) serializer.Response {
+	code := e.SUCCESS
+	video := model.Video {
+		Title : service.Title,
+		Cover : service.Cover,
+		Introduction : service.Introduction,
+		Original : service.Original,
+		Uid : id,
+		VideoType:viper.GetString("server.coding"),
+	}
+	model.DB.Model(model.Video{}).Create(&video)  // 创建视频
+	model.DB.Create(&model.Review{Vid: video.ID, Status: 500}) // 创建审核视频
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data:"上传成功",
 	}
 }
