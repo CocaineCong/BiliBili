@@ -8,6 +8,8 @@ var MsgFlags = map[int]string{
 	ErrorAuthCheckTokenFail:        "Token验证失败",
 	ErrorAuthCheckTokenTimeout:     "Token股哦其",
 	ErrorAuthInsufficientAuthority: "无权限",
+
+	ErrorUploadFile : "上传文件失败",
 }
 
 // GetMsg 获取状态码对应信息

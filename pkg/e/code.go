@@ -8,4 +8,6 @@ const (
 	ErrorAuthCheckTokenFail        = 30001
 	ErrorAuthCheckTokenTimeout     = 30002
 	ErrorAuthInsufficientAuthority = 30003
+
+	ErrorUploadFile = 40001
 )

@@ -8,6 +8,7 @@ import (
 	"BiliBili.com/serializer"
 	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
+	"mime/multipart"
 	"strconv"
 	"time"
 )
@@ -231,14 +232,23 @@ func (service *VideoDelete) Delete(id string) serializer.Response {
 	}
 }
 
-func (service *VideoShow) Upload(id uint) serializer.Response {
+func (service *VideoShow) Upload(id uint,file multipart.File,fileSize int64) serializer.Response {
 	code := e.SUCCESS
+	status , info := utils.UploadToQiNiu(file,fileSize)
+	if status != 200 {
+		return serializer.Response{
+			Status:  status  ,
+			Data:      e.GetMsg(status),
+			Error:info,
+		}
+	}
 	video := model.Video {
 		Title : service.Title,
 		Cover : service.Cover,
 		Introduction : service.Introduction,
 		Original : service.Original,
 		Uid : id,
+		Video:info,
 		VideoType:viper.GetString("server.coding"),
 	}
 	model.DB.Model(model.Video{}).Create(&video)  // 创建视频
