@@ -10,6 +10,9 @@ var MsgFlags = map[int]string{
 	ErrorAuthInsufficientAuthority: "无权限",
 
 	ErrorUploadFile : "上传文件失败",
+
+	ErrorFavorExist :"已经收藏了",
+	ErrorLikeExist :"已经点赞了",
 }
 
 // GetMsg 获取状态码对应信息

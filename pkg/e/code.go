@@ -10,4 +10,6 @@ const (
 	ErrorAuthInsufficientAuthority = 30003
 
 	ErrorUploadFile = 40001
+	ErrorFavorExist = 40002
+	ErrorLikeExist = 40003
 )

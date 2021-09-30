@@ -48,6 +48,10 @@ type VideoDelete struct {
 
 }
 
+type VideoInteractiveData struct {
+	UID uint
+}
+
 func ClicksStoreInDB() {
 	utils.Logfile("[info]", " Clicks are stored in the database")
 	var vid int          //视频id
@@ -259,3 +263,13 @@ func (service *VideoShow) Upload(id uint,file multipart.File,fileSize int64) ser
 		Data:"上传成功",
 	}
 }
+
+//func (service *VideoInteractiveData)Show(vid string,uid uint) serializer.Response{
+//	code := e.SUCCESS
+//	var interactive model.Interactive
+//	var data  model.Interactive
+//	var fId VideoInteractiveData
+//	model.DB.Model(&model.Interactive{}).Where("id=?",vid).First(&interactive) // 找到互动信息
+//	data =
+//
+//}

@@ -34,6 +34,13 @@ func NewRouter() *gin.Engine {
 			authed.PUT("video/:id",api.VideoUpdate)
 			authed.DELETE("video/:id",api.VideoDelete)
 			authed.POST("video",api.VideoUpload)
+
+			authed.GET("/video-interactive/:id", api.VideoInteractiveData) //获取点赞收藏关注的交互数据
+			authed.POST("/favor/:id", api.FavorCreate)
+			authed.DELETE("/favor/:id", api.FavorDelete)
+			authed.POST("/like/:id", api.Like)
+			authed.DELETE("/like/:id", api.Dislike)
+
 		}
 	}
 	return r
