@@ -45,7 +45,12 @@ func NewRouter() *gin.Engine {
 			authed.POST("/like/:id", api.Like)
 			authed.DELETE("/like/:id", api.Dislike)
 
-			//评论回复
+			//评论回复操作
+			authed.DELETE("comments/:id",api.CommentsDelete)
+			authed.DELETE("reply/:id",api.ReplyDelete)
+			authed.POST("comments/:vid",api.CreateComment)  // 这个vid是哪个视频的评论的id
+			authed.POST("reply/:cid",api.CreateReply) //这个cid是评论的id，哪条评论的回复
+
 
 		}
 	}
