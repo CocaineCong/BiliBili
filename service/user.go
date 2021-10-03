@@ -112,7 +112,7 @@ func (service *UserUpdate) Update(id uint) serializer.Response {
 	code := e.SUCCESS
 	err := model.DB.Model(model.User{}).Where("id = ?",id).
 		Updates(map[string]interface{}{
-			"name":service.Name,"gender":service.Gender,
+			"user_name":service.Name,"gender":service.Gender,
 			"birthday":service.Birthday,"sign":service.Sign}).Error
 	if err!=nil {
 		code = e.ERROR
@@ -136,7 +136,7 @@ func (service *UserInfo) Show(id uint) serializer.Response {
 	return serializer.Response {
 		Status:code,
 		Msg:e.GetMsg(code),
-		Data:"查看用户信息成功",
+		Data:serializer.BuildUser(user),
 	}
 }
 

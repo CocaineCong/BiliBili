@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("carousels",api.Carousel)
 
 		//视频操作
-		v1.GET("video/:id",api.VideoShow)
+		v1.GET("video/:id",api.VideoShow) //单个视频
 		v1.GET("video-recommend", api.VideoRecommend)
 
 		v1.GET("comment/:id",api.CommentsGet)
@@ -32,7 +32,7 @@ func NewRouter() *gin.Engine {
 			authed.POST("user/search",api.UserSearch)
 
 			//视频操作
-			authed.GET("video/:id",api.VideoList)
+			authed.GET("videos/:id",api.VideoList)  //视频列表
 			authed.GET("video-favor/:id",api.VideoFavorite)
 			authed.PUT("video/:id",api.VideoUpdate)
 			authed.DELETE("video/:id",api.VideoDelete)

@@ -20,7 +20,6 @@ func UserLogin(c *gin.Context) {
 	c.JSON(200,res)
 }
 
-
 func UserUpdate(c *gin.Context) {
 	var userUpdateService service.UserUpdate
 	_ = c.ShouldBind(&userUpdateService)
