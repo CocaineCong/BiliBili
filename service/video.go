@@ -6,6 +6,7 @@ import (
 	"BiliBili.com/pkg/e"
 	"BiliBili.com/pkg/utils"
 	"BiliBili.com/serializer"
+	"fmt"
 	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
 	"mime/multipart"
@@ -161,9 +162,13 @@ func (service *VideoShow) List(id string) serializer.Response {
 	code := e.SUCCESS
 	var videos []model.Video
 	var count int
-	model.DB.Model(&model.Video{}).Where("uid = ?",id).
+	if service.PageSize == 0 {
+		service.PageSize=10
+	}
+	model.DB.Model(model.Video{}).Where("uid = ?",id).Count(&count).
 		Limit(service.PageSize).Offset((service.PageNum-1)*service.PageSize).
-		Find(&videos).Count(&count)
+		Find(&videos)
+
 	return serializer.Response{
 		Status:code,
 		Msg:e.GetMsg(code),
@@ -247,6 +252,7 @@ func (service *VideoShow) Upload(id uint,file,cover multipart.File,coverSize,fil
 			Error:info,
 		}
 	}
+	fmt.Println("id",id)
 	video := model.Video {
 		Title : service.Title,
 		Cover : coverUrl,

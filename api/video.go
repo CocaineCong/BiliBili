@@ -54,7 +54,7 @@ func VideoUpload(c *gin.Context) {
 	file , fileHeader  ,_ := c.Request.FormFile("video")
 	cover , coverHeader  ,_ := c.Request.FormFile("cover")
 	_ = c.ShouldBind(&videoUploadService)
-	_,chaim,_ := utils.ParseUserToken(c.Param("Authorization"))
+	_,chaim,_ := utils.ParseUserToken(c.GetHeader("Authorization"))
 	res:=videoUploadService.Upload(chaim.UserId,file,cover,coverHeader.Size,fileHeader.Size)
 	c.JSON(200,res)
 }

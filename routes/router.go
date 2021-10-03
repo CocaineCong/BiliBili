@@ -32,7 +32,7 @@ func NewRouter() *gin.Engine {
 			authed.POST("user/search",api.UserSearch)
 
 			//视频操作
-			authed.GET("videos/:id",api.VideoList)  //视频列表
+			authed.GET("videos/:id",api.VideoList)  //视频列表 这个id是用户的id可以通过这个id查看其他人的视频列表
 			authed.GET("video-favor/:id",api.VideoFavorite)
 			authed.PUT("video/:id",api.VideoUpdate)
 			authed.DELETE("video/:id",api.VideoDelete)
