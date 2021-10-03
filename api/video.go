@@ -60,9 +60,9 @@ func VideoUpload(c *gin.Context) {
 }
 
 func VideoInteractiveData(c *gin.Context) {
-	//var videoInteractiveService service.VideoInteractiveData
-	//_ = c.ShouldBind(&videoInteractiveService)
-	//_,chaim,_ := utils.ParseUserToken(c.Param("Authorization"))
-	//res := videoInteractiveService.Show(c.Param("id"),chaim.UserId)
-	//c.JSON(200,res)
+	var videoInteractiveService service.VideoInteractiveData
+	_ = c.ShouldBind(&videoInteractiveService)
+	_,chaim,_ := utils.ParseUserToken(c.Param("Authorization"))
+	res := videoInteractiveService.Show(c.Param("id"),chaim.UserId)
+	c.JSON(200,res)
 }

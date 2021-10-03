@@ -52,6 +52,12 @@ type VideoInteractiveData struct {
 	UID uint
 }
 
+type InteractiveData struct {
+	Collect bool `json:"collect"`
+	Like    bool `json:"like"`
+	Follow  bool `json:"follow"`
+}
+
 func ClicksStoreInDB() {
 	utils.Logfile("[info]", " Clicks are stored in the database")
 	var vid int          //视频id
@@ -268,12 +274,26 @@ func (service *VideoShow) Upload(id uint,file,cover multipart.File,coverSize,fil
 	}
 }
 
-//func (service *VideoInteractiveData)Show(vid string,uid uint) serializer.Response{
-//	code := e.SUCCESS
-//	var interactive model.Interactive
-//	var data  model.Interactive
-//	var fId VideoInteractiveData
-//	model.DB.Model(&model.Interactive{}).Where("id=?",vid).First(&interactive) // 找到互动信息
-//	data =
-//
-//}
+func (service *VideoInteractiveData)Show(vid string,cid uint) serializer.Response{
+	code := e.SUCCESS
+	var interactive model.Interactive
+	var follow model.Follow
+	var count int
+	var fans bool
+	model.DB.Model(&model.Interactive{}).Where("vid=? AND uid = ?",vid,cid).First(&interactive) // 找到互动信息
+	model.DB.Model(&model.Follow{}).Where("uid = ? AND cid = ?",interactive.Video.Uid,cid).First(&follow).Count(&count)
+	if count == 1 {
+		fans =true
+	}
+	data := InteractiveData {
+		Collect:interactive.Collect,
+		Like:interactive.Like,
+		Follow:fans,
+	}
+	return serializer.Response{
+		Status:code,
+		Msg:e.GetMsg(code),
+		Data: data,
+	}
+
+}
