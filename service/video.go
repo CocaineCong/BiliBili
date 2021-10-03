@@ -26,7 +26,7 @@ type VideoShow struct {
 	Clicks       int `json:"clicks"`         //点击量
 	Review       bool `json:"review"`   	 //是否审查通过
 	PageSize int `json:"page_size" form:"page_size"`
-	PageNum int `json:"page_num" form:"page_num"`
+	PageNum  int `json:"page_num" form:"page_num"`
 }
 
 type VideoRecommend struct {
@@ -236,9 +236,10 @@ func (service *VideoDelete) Delete(id string) serializer.Response {
 	}
 }
 
-func (service *VideoShow) Upload(id uint,file multipart.File,fileSize int64) serializer.Response {
+func (service *VideoShow) Upload(id uint,file,cover multipart.File,coverSize,fileSize int64) serializer.Response {
 	code := e.SUCCESS
 	status , info := utils.UploadToQiNiu(file,fileSize)
+	_ , coverUrl := utils.UploadToQiNiu(cover,coverSize)
 	if status != 200 {
 		return serializer.Response{
 			Status:  status  ,
@@ -248,7 +249,7 @@ func (service *VideoShow) Upload(id uint,file multipart.File,fileSize int64) ser
 	}
 	video := model.Video {
 		Title : service.Title,
-		Cover : service.Cover,
+		Cover : coverUrl,
 		Introduction : service.Introduction,
 		Original : service.Original,
 		Uid : id,
