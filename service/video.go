@@ -180,8 +180,8 @@ func (service *VideoShow) Favor(id string) serializer.Response {
 	var favorite []model.Interactive
 	var count int
 	model.DB.Model(model.Interactive{}).Where("uid = ? AND collect = true",id).
-		Limit(service.PageSize).Offset((service.PageSize-1)*service.PageNum).
-		Preload("Video").Find(&favorite).Count(&count)
+	Count(&count).Limit(service.PageSize).Offset((service.PageSize-1)*service.PageNum).
+		Preload("Video").Find(&favorite)
 	return serializer.Response{
 		Status:code,
 		Msg:e.GetMsg(code),
