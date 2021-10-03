@@ -15,11 +15,10 @@ import (
 )
 
 type VideoShow struct {
-	Title        string `json:"title" bind:"required"`
-	Cover        string `json:"cover" bind:"required"`
+	Title        string `json:"title" form:"title" bind:"required"`
 	Video        string `json:"video"`
-	VideoType    string `json:"video_type"`
-	Introduction string `json:"introduction"`  	 //视频简介
+	VideoType    string `json:"video_type" form:"video_type"`
+	Introduction string `json:"introduction" form:"introduction"`  	 //视频简介
 	Uid          uint `json:"uid"`
 	Author       model.User `json:"author"`
 	Original     bool `json:"original"`        //是否为原创
@@ -39,10 +38,10 @@ type VideoRecommend struct {
 }
 
 type VideoInfo struct {
-	Title  string `json:"title" bind:"required"`
-	Cover  string `json:"cover" bind:"required"`
-	Introduction string `json:"introduction"`
-	Original bool `json:"original" bind:"required"`
+	Title  string `json:"title" form:"title" bind:"required"`
+	Cover  string `json:"cover" form:"cover" bind:"required"`
+	Introduction string `json:"introduction" form:"introduction" `
+	Original bool `json:"original" form:"original" bind:"required"`
 }
 
 type VideoDelete struct {
@@ -194,14 +193,12 @@ func (service *VideoInfo) Update(id string,uid uint) serializer.Response {
 	code := e.SUCCESS
 	var video model.Video
 	model.DB.Where(model.Video{}).Where("id = ?",id).First(&video)
-
-	video.Cover = service.Cover
 	video.Title = service.Title
 	video.Introduction = service.Introduction
 	video.Original = service.Original
 	model.DB.Save(&video)
 	err := model.DB.Model(&model.Video{}).Where("id = ? and uid = ?", id, uid).
-		Updates(map[string]interface{}{"title": service.Title, "cover": service.Cover,
+		Updates(map[string]interface{}{"title": service.Title,
 			"introduction": service.Introduction, "original": service.Introduction}).Error
 	if err!=nil {
 		code = e.ERROR
