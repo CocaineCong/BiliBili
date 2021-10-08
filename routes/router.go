@@ -54,6 +54,11 @@ func NewRouter() *gin.Engine {
 			//弹幕
 			authed.GET("danmu/:vid",api.ListDanmu)
 			authed.POST("send",api.CreateDanmu)
+
+			//关注
+			authed.GET("following",api.ListFollowing) // 关注列表
+			authed.GET("follower",api.ListFollower)   // 粉丝列表
+
 		}
 	}
 	return r

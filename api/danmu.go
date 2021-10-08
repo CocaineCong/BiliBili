@@ -18,4 +18,3 @@ func CreateDanmu(c *gin.Context) {
 	res := createDanmuService.Create(c.Param("uid"))
 	c.JSON(200,res)
 }
-
