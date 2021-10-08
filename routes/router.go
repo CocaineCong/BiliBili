@@ -58,7 +58,8 @@ func NewRouter() *gin.Engine {
 			//关注
 			authed.GET("following",api.ListFollowing) // 关注列表
 			authed.GET("follower",api.ListFollower)   // 粉丝列表
-
+			authed.POST("following",api.CreateFollowing)
+			authed.DELETE("following",api.DeleteFollowing)
 		}
 	}
 	return r

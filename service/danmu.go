@@ -48,3 +48,4 @@ func (service *CreateDamuService)Create(uid string) serializer.Response {
 		Data:"创建成功啦！",
 	}
 }
+
