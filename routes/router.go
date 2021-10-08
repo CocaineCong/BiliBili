@@ -39,11 +39,11 @@ func NewRouter() *gin.Engine {
 			authed.POST("video",api.VideoUpload)
 
 			//互动操作
-			authed.GET("/video-interactive/:id", api.VideoInteractiveData) //获取点赞收藏关注的交互数据
-			authed.POST("/favor/:id", api.FavorCreate)
-			authed.DELETE("/favor/:id", api.FavorDelete)
-			authed.POST("/like/:id", api.Like)
-			authed.DELETE("/like/:id", api.Dislike)
+			authed.GET("video-interactive/:id", api.VideoInteractiveData) //获取点赞收藏关注的交互数据
+			authed.POST("favor/:id", api.FavorCreate)
+			authed.DELETE("favor/:id", api.FavorDelete)
+			authed.POST("like/:id", api.Like)
+			authed.DELETE("like/:id", api.Dislike)
 
 			//评论回复操作
 			authed.DELETE("comments/:id",api.CommentsDelete)
@@ -51,7 +51,9 @@ func NewRouter() *gin.Engine {
 			authed.POST("comments/:vid",api.CreateComment)  // 这个vid是哪个视频的评论的id
 			authed.POST("reply/:cid",api.CreateReply) //这个cid是评论的id，哪条评论的回复
 
-
+			//弹幕
+			authed.GET("danmu/:vid",api.ListDanmu)
+			authed.POST("send",api.CreateDanmu)
 		}
 	}
 	return r
